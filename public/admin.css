@@ -1,0 +1,203 @@
+/* ===== Espace admin — L'Œil du Campus ===== */
+body.admin-body {
+  background: var(--paper-line);
+  min-height: 100vh;
+}
+
+.admin-topbar {
+  background: var(--ink);
+  color: #fff;
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--press-red);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.admin-topbar .titre {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.admin-topbar .titre span {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: #9FADC8;
+  margin-top: 2px;
+}
+.admin-topbar a.btn-export {
+  background: var(--press-red);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 10px 18px;
+  border-radius: 999px;
+  transition: background 0.15s, transform 0.15s;
+}
+.admin-topbar a.btn-export:hover { background: #A50F29; transform: translateY(-1px); }
+
+.admin-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+/* --- Cartes de stats --- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.stat-card {
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 6px rgba(14,27,51,0.05);
+}
+.stat-card .nombre {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-card .label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.stat-card.accent .nombre { color: var(--press-red); }
+
+/* --- Répartition par section --- */
+.sections-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.badge-section {
+  background: #fff;
+  border: 1px solid var(--paper-line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.badge-section b { color: var(--ink); }
+
+/* --- Barre de recherche --- */
+.admin-toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.admin-toolbar input[type="search"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--paper-line);
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  background: #fff;
+}
+.admin-toolbar input[type="search"]:focus {
+  outline: none;
+  border-color: var(--press-red);
+  box-shadow: 0 0 0 3px rgba(195,20,50,0.12);
+}
+
+/* --- Tableau --- */
+.table-scroll {
+  background: var(--paper);
+  border-radius: 14px;
+  border: 1px solid var(--paper-line);
+  overflow: auto;
+  box-shadow: 0 4px 16px rgba(14,27,51,0.06);
+}
+table.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 900px;
+}
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--ink);
+  color: #fff;
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.admin-table tbody tr {
+  border-top: 1px solid var(--paper-line);
+  transition: background 0.1s;
+}
+.admin-table tbody tr:hover { background: #F5F2E8; }
+.admin-table td {
+  padding: 12px 14px;
+  vertical-align: top;
+  color: var(--text);
+}
+.candidat-nom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.avatar-initiales {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.pill-section {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: rgba(201,138,44,0.15);
+  color: #8A5D18;
+  white-space: nowrap;
+}
+.liens-pieces { display: flex; flex-wrap: wrap; gap: 6px; }
+.liens-pieces a {
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border: 1px solid var(--paper-line);
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.liens-pieces a:hover { border-color: var(--press-red); color: var(--press-red); }
+.date-cell { color: var(--text-muted); white-space: nowrap; font-size: 0.82rem; }
+
+.aucun-resultat {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}

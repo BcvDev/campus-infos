@@ -15,7 +15,35 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // à protéger par mot de passe en production
+
+// --- Authentification basique pour l'espace admin (et les fichiers uploadés) ---
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+function requireAdminAuth(req, res, next) {
+  if (!ADMIN_PASSWORD) {
+    // Sécurité : si aucun mot de passe n'est défini dans l'environnement,
+    // on bloque l'accès plutôt que de laisser l'espace admin ouvert.
+    return res.status(500).send(
+      "Accès admin non configuré : définissez ADMIN_USER et ADMIN_PASSWORD dans le fichier .env avant de déployer."
+    );
+  }
+
+  const header = req.headers.authorization || '';
+  const [scheme, encoded] = header.split(' ');
+
+  if (scheme === 'Basic' && encoded) {
+    const [user, password] = Buffer.from(encoded, 'base64').toString().split(':');
+    if (user === ADMIN_USER && password === ADMIN_PASSWORD) {
+      return next();
+    }
+  }
+
+  res.set('WWW-Authenticate', 'Basic realm="Espace admin"');
+  return res.status(401).send('Authentification requise.');
+}
+
+app.use('/uploads', requireAdminAuth, express.static(path.join(__dirname, 'uploads')));
 
 // --- Configuration Multer (upload des pièces) ---
 const uploadDir = path.join(__dirname, 'uploads');
@@ -100,10 +128,51 @@ app.post('/candidater', (req, res) => {
   });
 });
 
-// --- Petit espace admin pour consulter les candidatures reçues ---
-app.get('/admin/candidatures', (req, res) => {
+// --- Espace admin pour consulter les candidatures reçues ---
+app.get('/admin/candidatures', requireAdminAuth, (req, res) => {
   const rows = db.prepare('SELECT * FROM candidatures ORDER BY date_soumission DESC').all();
-  res.render('admin', { candidatures: rows });
+
+  const parSection = {};
+  rows.forEach(c => {
+    parSection[c.section] = (parSection[c.section] || 0) + 1;
+  });
+
+  const aujourdHui = new Date();
+  const il_y_a_7_jours = new Date(aujourdHui.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const recentes = rows.filter(c => new Date(c.date_soumission) >= il_y_a_7_jours).length;
+
+  res.render('admin', {
+    candidatures: rows,
+    total: rows.length,
+    parSection,
+    recentes
+  });
+});
+
+// --- Export CSV des candidatures ---
+app.get('/admin/export.csv', requireAdminAuth, (req, res) => {
+  const rows = db.prepare('SELECT * FROM candidatures ORDER BY date_soumission DESC').all();
+
+  const colonnes = [
+    'id', 'nom_complet', 'numero_carte', 'filiere', 'telephone', 'email', 'section',
+    'experience', 'motivation', 'numero_paiement', 'date_soumission'
+  ];
+
+  const echapper = (val) => {
+    const s = (val === null || val === undefined) ? '' : String(val);
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+
+  const lignes = [colonnes.join(',')];
+  rows.forEach(c => {
+    lignes.push(colonnes.map(col => echapper(c[col])).join(','));
+  });
+
+  const csv = '\uFEFF' + lignes.join('\r\n'); // BOM pour un bon affichage des accents dans Excel
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="candidatures-${Date.now()}.csv"`);
+  res.send(csv);
 });
 
 app.listen(PORT, () => {

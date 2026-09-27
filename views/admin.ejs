@@ -2,38 +2,118 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Admin — Candidatures reçues</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Candidatures | L'Œil du Campus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
-  <style>body{background:#f2f1ea;padding:30px;} .wrap-admin{max-width:1100px;margin:0 auto;} h1{font-family:'Fraunces',serif;color:#0E1B33;}</style>
+  <link rel="stylesheet" href="/admin.css">
 </head>
-<body>
-  <div class="wrap-admin">
-    <h1>Candidatures reçues (<%= candidatures.length %>)</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Nom</th><th>Section</th><th>Téléphone</th><th>Email</th><th>Paiement</th><th>Pièces</th><th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% candidatures.forEach(c => { %>
-          <tr>
-            <td><%= c.nom_complet %></td>
-            <td><%= c.section %></td>
-            <td><%= c.telephone %></td>
-            <td><%= c.email %></td>
-            <td><%= c.numero_paiement %></td>
-            <td>
-              <a href="/uploads/<%= c.fichier_carte_etudiant %>" target="_blank">Carte</a> |
-              <a href="/uploads/<%= c.fichier_cni %>" target="_blank">CNI</a> |
-              <a href="/uploads/<%= c.fichier_lettre_motivation %>" target="_blank">Lettre</a> |
-              <a href="/uploads/<%= c.fichier_preuve_paiement %>" target="_blank">Preuve paiement</a>
-            </td>
-            <td><%= c.date_soumission %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
+<body class="admin-body">
+
+  <div class="admin-topbar">
+    <p class="titre">
+      L'Œil du Campus
+      <span>Espace admin — candidatures reçues</span>
+    </p>
+    <a class="btn-export" href="/admin/export.csv">⬇ Exporter en CSV</a>
   </div>
+
+  <div class="admin-wrap">
+
+    <div class="stats-row">
+      <div class="stat-card accent">
+        <div class="nombre"><%= total %></div>
+        <div class="label">Candidatures au total</div>
+      </div>
+      <div class="stat-card">
+        <div class="nombre"><%= recentes %></div>
+        <div class="label">Reçues les 7 derniers jours</div>
+      </div>
+      <div class="stat-card">
+        <div class="nombre"><%= Object.keys(parSection).length %></div>
+        <div class="label">Sections représentées</div>
+      </div>
+    </div>
+
+    <% if (Object.keys(parSection).length) { %>
+      <div class="sections-badges">
+        <% Object.entries(parSection).sort((a,b) => b[1]-a[1]).forEach(([section, n]) => { %>
+          <span class="badge-section"><b><%= n %></b> — <%= section %></span>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <div class="admin-toolbar">
+      <input type="search" id="recherche" placeholder="Rechercher par nom, section, téléphone ou email…" autocomplete="off">
+    </div>
+
+    <div class="table-scroll">
+      <table class="admin-table" id="table-candidatures">
+        <thead>
+          <tr>
+            <th>Candidat</th>
+            <th>Section</th>
+            <th>Filière</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>N° paiement</th>
+            <th>Pièces jointes</th>
+            <th>Reçue le</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% candidatures.forEach(c => {
+               const initiales = c.nom_complet.trim().split(/\s+/).slice(0,2).map(m => m[0].toUpperCase()).join('');
+               const dateAffichee = new Date(c.date_soumission).toLocaleString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          %>
+            <tr data-recherche="<%= (c.nom_complet + ' ' + c.section + ' ' + c.telephone + ' ' + c.email).toLowerCase() %>">
+              <td>
+                <div class="candidat-nom">
+                  <span class="avatar-initiales"><%= initiales %></span>
+                  <div>
+                    <%= c.nom_complet %><br>
+                    <small style="color:var(--text-muted); font-weight:400;">N° carte : <%= c.numero_carte %></small>
+                  </div>
+                </div>
+              </td>
+              <td><span class="pill-section"><%= c.section %></span></td>
+              <td><%= c.filiere %></td>
+              <td><%= c.telephone %></td>
+              <td><%= c.email %></td>
+              <td><%= c.numero_paiement %></td>
+              <td>
+                <div class="liens-pieces">
+                  <a href="/uploads/<%= c.fichier_carte_etudiant %>" target="_blank">Carte</a>
+                  <a href="/uploads/<%= c.fichier_cni %>" target="_blank">CNI</a>
+                  <a href="/uploads/<%= c.fichier_lettre_motivation %>" target="_blank">Lettre</a>
+                  <a href="/uploads/<%= c.fichier_preuve_paiement %>" target="_blank">Preuve</a>
+                </div>
+              </td>
+              <td class="date-cell"><%= dateAffichee %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% if (!candidatures.length) { %>
+        <div class="aucun-resultat">Aucune candidature reçue pour le moment.</div>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    const champRecherche = document.getElementById('recherche');
+    const lignes = Array.from(document.querySelectorAll('#table-candidatures tbody tr'));
+
+    champRecherche.addEventListener('input', () => {
+      const q = champRecherche.value.trim().toLowerCase();
+      lignes.forEach(ligne => {
+        const correspond = ligne.dataset.recherche.includes(q);
+        ligne.style.display = correspond ? '' : 'none';
+      });
+    });
+  </script>
+
 </body>
 </html>
