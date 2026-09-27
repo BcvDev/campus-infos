@@ -1,0 +1,270 @@
+/* Page vitrine — reprend les tokens de style.css (--ink, --press-red, --ochre, --paper) */
+
+.page-accueil {
+  background: var(--paper);
+  color: var(--text);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.ruban-diagonal {
+  position: absolute;
+  top: 0; left: 0;
+  width: 260px; height: 130px;
+  background: linear-gradient(135deg, var(--press-red) 50%, var(--ink) 50%);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  z-index: 0;
+}
+
+/* ===== En-tête ===== */
+.entete {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 28px clamp(20px, 6vw, 60px) 10px;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo__oeil { width: 40px; height: 40px; color: var(--ink); flex: none; }
+.logo__texte { display: flex; flex-direction: column; line-height: 1.15; }
+.logo__texte strong {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+.logo__texte span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--press-red);
+  letter-spacing: 0.03em;
+}
+.devise {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ===== Bandeau appel ===== */
+.bandeau-appel {
+  position: relative;
+  z-index: 1;
+  background: var(--ink);
+  color: #fff;
+  text-align: center;
+  padding: 44px 20px 40px;
+  margin-top: 18px;
+}
+.pastille {
+  display: inline-block;
+  background: var(--press-red);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 7px 20px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.bandeau-appel h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  line-height: 1.15;
+  margin: 0;
+}
+.bandeau-appel h1 span {
+  display: block;
+  font-size: 0.55em;
+  color: var(--ochre);
+  margin-top: 4px;
+}
+.sous-titre {
+  margin: 22px auto 0;
+  max-width: 480px;
+  font-size: 1.02rem;
+  color: #C7D0E0;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 18px;
+}
+
+/* ===== Contenu ===== */
+.contenu {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 44px clamp(20px, 5vw, 40px) 10px;
+  position: relative;
+  z-index: 1;
+}
+.intro {
+  max-width: 680px;
+  margin: 0 auto 30px;
+  text-align: center;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 1.02rem;
+}
+
+.cta-postuler {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 46px;
+  background: var(--press-red);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 15px 36px;
+  border-radius: 3px;
+  box-shadow: 0 10px 24px -8px rgba(195,20,50,0.5);
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+}
+.cta-postuler:hover { transform: translateY(-1px); box-shadow: 0 14px 28px -8px rgba(195,20,50,0.6); }
+.cta-postuler--large { font-size: 1.05rem; padding: 17px 44px; margin-top: 8px; }
+
+/* ===== Colonnes ===== */
+.colonnes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 40px;
+}
+@media (max-width: 760px) {
+  .colonnes { grid-template-columns: 1fr; }
+}
+
+.colonne {
+  border: 1px solid var(--paper-line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+.colonne__entete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  color: #fff;
+}
+.colonne__entete--rouge { background: var(--press-red); }
+.colonne__entete--navy { background: var(--ink); }
+.colonne__entete svg { width: 20px; height: 20px; flex: none; }
+.colonne__entete h2 {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.colonne ul {
+  margin: 0;
+  padding: 16px 18px 20px 34px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+.colonne ul li { margin-bottom: 8px; }
+.colonne ul.liste-coche { list-style: none; padding-left: 18px; }
+.colonne ul.liste-coche li {
+  position: relative;
+  padding-left: 22px;
+}
+.colonne ul.liste-coche li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--ochre);
+  font-weight: 700;
+}
+
+/* ===== Infos (frais / dates) ===== */
+.ligne-infos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 34px;
+}
+@media (max-width: 700px) {
+  .ligne-infos { grid-template-columns: 1fr; }
+}
+.carte-info {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 4px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.carte-info--frais { background: #142848; }
+.carte-info__label {
+  font-size: 0.78rem;
+  color: #9FADC8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.carte-info__valeur {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.carte-info__valeur--rouge { color: #FF6B7F; }
+.carte-info__note { font-size: 0.78rem; color: #C7D0E0; }
+
+/* ===== Contacts ===== */
+.bande-contacts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--paper);
+  border: 1.5px solid var(--paper-line);
+  border-radius: 999px;
+  padding: 12px 24px;
+  margin: 0 auto 40px;
+  width: fit-content;
+  font-size: 0.92rem;
+}
+.bande-contacts span { color: var(--text-muted); }
+.bande-contacts strong { color: var(--ink); font-family: var(--serif); }
+
+/* ===== Bande de clôture ===== */
+.bande-cloture {
+  background: var(--ink);
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 20px;
+}
+.bande-cloture p {
+  max-width: 620px;
+  margin: 0 auto;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #E7E9EE;
+}
+
+/* ===== Pied de page ===== */
+.pied-accueil {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 26px clamp(20px, 6vw, 60px) 34px;
+  font-size: 0.85rem;
+}
+.pied-accueil__marque, .pied-accueil__signataire {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pied-accueil__marque strong, .pied-accueil__signataire strong { font-family: var(--serif); }
+.pied-accueil__marque span, .pied-accueil__signataire span { color: #9FADC8; }
+.pied-accueil__signataire { text-align: right; }

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidature — L'Œil du Campus 100% Natitingou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <header class="masthead">
+    <p class="kicker"><a href="/" class="lien-retour">← Retour</a> · Appel à candidature — Année 2026–2027</p>
+    <h1>L'Œil du Campus<span>100% Natitingou</span></h1>
+    <p class="signature">Informer sans parti pris.</p>
+  </header>
+
+  <main class="wrap">
+
+    <% if (cloturee) { %>
+      <div class="paper">
+        <div class="notice notice--closed">
+          <h2>Les candidatures sont closes</h2>
+          <p>La période de dépôt s'est achevée le 18 octobre 2026. Merci de l'intérêt porté à L'Œil du Campus — suivez nos publications pour le prochain appel.</p>
+        </div>
+      </div>
+    <% } else { %>
+
+      <p class="lede">
+        L'Œil du Campus élargit son équipe et recherche des étudiants du Centre Universitaire de Natitingou
+        prêts à mettre leur créativité au service de l'information universitaire.
+        Dépôt avant le <strong>18 octobre 2026</strong>.
+      </p>
+
+      <div class="paper">
+
+        <% if (erreur) { %>
+          <div class="notice notice--error"><%= erreur %></div>
+        <% } %>
+
+        <form action="/candidater" method="POST" enctype="multipart/form-data" novalidate>
+
+          <section class="bloc">
+            <div class="bloc__num">1</div>
+            <div class="bloc__body">
+              <h2>Informations personnelles</h2>
+
+              <div class="grille2">
+                <div class="champ">
+                  <label for="nom_complet">Nom et prénom(s)</label>
+                  <input type="text" id="nom_complet" name="nom_complet" required>
+                </div>
+                <div class="champ">
+                  <label for="numero_carte">Numéro de carte d'étudiant</label>
+                  <input type="text" id="numero_carte" name="numero_carte" required>
+                </div>
+              </div>
+
+              <div class="grille2">
+                <div class="champ">
+                  <label for="filiere">Filière / niveau (FAST ou ENS)</label>
+                  <input type="text" id="filiere" name="filiere" required>
+                </div>
+                <div class="champ">
+                  <label for="telephone">Contact téléphonique</label>
+                  <input type="tel" id="telephone" name="telephone" required>
+                </div>
+              </div>
+
+              <div class="champ">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+            </div>
+          </section>
+
+          <hr class="rule">
+
+          <section class="bloc">
+            <div class="bloc__num">2</div>
+            <div class="bloc__body">
+              <h2>Choix de la section</h2>
+              <p class="aide">Sélectionnez la section dans laquelle vous souhaitez contribuer.</p>
+
+              <div class="cartes-section">
+
+                <input type="radio" name="section" id="sec-video" value="Graphisme & montage vidéo" required>
+                <label for="sec-video" class="carte-section">
+                  <svg viewBox="0 0 48 48" fill="none"><path d="M6 14a3 3 0 0 1 3-3h18a3 3 0 0 1 3 3v20a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V14Z" stroke="currentColor" stroke-width="2"/><path d="M30 20l11-6v20l-11-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                  <span class="carte-section__titre">Graphisme &amp; montage vidéo</span>
+                  <span class="carte-section__sous">Habillage, montage, identité visuelle</span>
+                </label>
+
+                <input type="radio" name="section" id="sec-photo" value="Photographie">
+                <label for="sec-photo" class="carte-section">
+                  <svg viewBox="0 0 48 48" fill="none"><path d="M6 16a3 3 0 0 1 3-3h4l2-3h10l2 3h4a3 3 0 0 1 3 3v18a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V16Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="24" cy="25" r="6" stroke="currentColor" stroke-width="2"/></svg>
+                  <span class="carte-section__titre">Photographie</span>
+                  <span class="carte-section__sous">Reportage visuel, portraits, événements</span>
+                </label>
+
+                <input type="radio" name="section" id="sec-reportage" value="Reportage & Médias">
+                <label for="sec-reportage" class="carte-section">
+                  <svg viewBox="0 0 48 48" fill="none"><path d="M9 9h24l6 6v24H9V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 19h18M15 25h18M15 31h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  <span class="carte-section__titre">Reportage &amp; Médias</span>
+                  <span class="carte-section__sous">Enquêtes, articles, actualité du campus</span>
+                </label>
+
+              </div>
+
+              <div class="champ">
+                <label for="experience">Expérience ou compétences liées à la section choisie</label>
+                <textarea id="experience" name="experience" rows="3"></textarea>
+              </div>
+
+              <div class="champ">
+                <label for="motivation">Pourquoi souhaitez-vous rejoindre L'Œil du Campus ?</label>
+                <textarea id="motivation" name="motivation" rows="4" required></textarea>
+              </div>
+            </div>
+          </section>
+
+          <hr class="rule">
+
+          <section class="bloc">
+            <div class="bloc__num">3</div>
+            <div class="bloc__body">
+              <h2>Pièces à fournir</h2>
+              <p class="aide">Formats acceptés : jpg, png, pdf — 5 Mo maximum par fichier.</p>
+
+              <div class="champ">
+                <label for="fichier_carte_etudiant">Carte d'étudiant ou fiche de validation 2026–2027</label>
+                <div class="dropzone" data-dropzone>
+                  <input type="file" id="fichier_carte_etudiant" name="fichier_carte_etudiant" required>
+                  <svg class="dropzone__icone" viewBox="0 0 24 24" fill="none"><path d="M12 4v11m0-11 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <span class="dropzone__texte">Cliquez ou glissez le fichier ici</span>
+                  <span class="dropzone__nom"></span>
+                </div>
+              </div>
+
+              <div class="champ">
+                <label for="fichier_cni">Carte d'identité (CNI) ou CIP</label>
+                <div class="dropzone" data-dropzone>
+                  <input type="file" id="fichier_cni" name="fichier_cni" required>
+                  <svg class="dropzone__icone" viewBox="0 0 24 24" fill="none"><path d="M12 4v11m0-11 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <span class="dropzone__texte">Cliquez ou glissez le fichier ici</span>
+                  <span class="dropzone__nom"></span>
+                </div>
+              </div>
+
+              <div class="champ">
+                <label for="fichier_lettre_motivation">Lettre de motivation adressée au Coordonnateur Général</label>
+                <div class="dropzone" data-dropzone>
+                  <input type="file" id="fichier_lettre_motivation" name="fichier_lettre_motivation" required>
+                  <svg class="dropzone__icone" viewBox="0 0 24 24" fill="none"><path d="M12 4v11m0-11 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <span class="dropzone__texte">Cliquez ou glissez le fichier ici</span>
+                  <span class="dropzone__nom"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="rule">
+
+          <section class="bloc">
+            <div class="bloc__num">4</div>
+            <div class="bloc__body">
+              <h2>Frais d'inscription</h2>
+
+              <div class="encart-paiement">
+                <p><strong>2 000 FCFA</strong> — donnant droit à un tee-shirt de l'équipe.</p>
+                <p>Paiement direct sur les numéros :</p>
+                <p class="numeros">01 53 82 20 32 &nbsp;·&nbsp; 01 45 21 19 48</p>
+              </div>
+
+              <div class="grille2">
+                <div class="champ">
+                  <label for="numero_paiement">Numéro utilisé pour le paiement</label>
+                  <input type="text" id="numero_paiement" name="numero_paiement" required>
+                </div>
+                <div class="champ">
+                  <label for="fichier_preuve_paiement">Preuve de paiement (capture d'écran)</label>
+                  <div class="dropzone" data-dropzone>
+                    <input type="file" id="fichier_preuve_paiement" name="fichier_preuve_paiement" required>
+                    <svg class="dropzone__icone" viewBox="0 0 24 24" fill="none"><path d="M12 4v11m0-11 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    <span class="dropzone__texte">Cliquez ou glissez le fichier ici</span>
+                    <span class="dropzone__nom"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <label class="confirmation">
+            <input type="checkbox" required>
+            Je certifie l'exactitude des informations fournies.
+          </label>
+
+          <button type="submit" class="btn-envoyer">Envoyer ma candidature</button>
+        </form>
+      </div>
+
+    <% } %>
+
+  </main>
+
+  <footer class="colophon">
+    <p>L'Œil du Campus 100% Natitingou — Contacts : 01 53 82 20 32 / 01 45 21 19 48</p>
+  </footer>
+
+  <script src="/dropzone.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin — Candidatures reçues</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>body{background:#f2f1ea;padding:30px;} .wrap-admin{max-width:1100px;margin:0 auto;} h1{font-family:'Fraunces',serif;color:#0E1B33;}</style>
+</head>
+<body>
+  <div class="wrap-admin">
+    <h1>Candidatures reçues (<%= candidatures.length %>)</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th><th>Section</th><th>Téléphone</th><th>Email</th><th>Paiement</th><th>Pièces</th><th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% candidatures.forEach(c => { %>
+          <tr>
+            <td><%= c.nom_complet %></td>
+            <td><%= c.section %></td>
+            <td><%= c.telephone %></td>
+            <td><%= c.email %></td>
+            <td><%= c.numero_paiement %></td>
+            <td>
+              <a href="/uploads/<%= c.fichier_carte_etudiant %>" target="_blank">Carte</a> |
+              <a href="/uploads/<%= c.fichier_cni %>" target="_blank">CNI</a> |
+              <a href="/uploads/<%= c.fichier_lettre_motivation %>" target="_blank">Lettre</a> |
+              <a href="/uploads/<%= c.fichier_preuve_paiement %>" target="_blank">Preuve paiement</a>
+            </td>
+            <td><%= c.date_soumission %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

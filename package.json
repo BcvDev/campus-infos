@@ -1,0 +1,16 @@
+{
+  "name": "oeil-campus-candidature",
+  "version": "1.0.0",
+  "description": "Formulaire de candidature - L'Oeil du Campus 100% Natitingou",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ejs": "^3.1.10",
+    "multer": "^1.4.5-lts.1",
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5"
+  }
+}
