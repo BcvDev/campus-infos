@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion admin — L'Œil du Campus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="login-screen">
+    <div class="login-card">
+      <p class="login-kicker">L'Œil du Campus</p>
+      <h1>Espace admin</h1>
+      <p class="login-sous-titre">Connexion réservée à l'organisation</p>
+
+      <% if (erreur) { %>
+        <div class="login-erreur"><%= erreur %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/login">
+        <input type="hidden" name="next" value="<%= next %>">
+
+        <label for="identifiant">Identifiant</label>
+        <input type="text" id="identifiant" name="identifiant" autocomplete="username" required autofocus>
+
+        <label for="mot_de_passe">Mot de passe</label>
+        <input type="password" id="mot_de_passe" name="mot_de_passe" autocomplete="current-password" required>
+
+        <button type="submit" class="btn-login">Se connecter</button>
+      </form>
+
+      <a class="login-retour" href="/">← Retour au site</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const db = require('./db');
 
 const app = express();
@@ -16,9 +18,26 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
-// --- Authentification basique pour l'espace admin (et les fichiers uploadés) ---
+// --- Authentification de l'espace admin (vraie page de connexion + session) ---
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+
+if (!process.env.SESSION_SECRET) {
+  console.warn('⚠️  SESSION_SECRET non défini dans .env : une valeur aléatoire est utilisée pour cette exécution (les sessions seront invalidées à chaque redémarrage).');
+}
+
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    maxAge: 8 * 60 * 60 * 1000, // 8 heures
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production'
+  }
+}));
 
 function requireAdminAuth(req, res, next) {
   if (!ADMIN_PASSWORD) {
@@ -28,20 +47,42 @@ function requireAdminAuth(req, res, next) {
       "Accès admin non configuré : définissez ADMIN_USER et ADMIN_PASSWORD dans le fichier .env avant de déployer."
     );
   }
+  if (req.session && req.session.estAdmin) {
+    return next();
+  }
+  return res.redirect('/admin/login?next=' + encodeURIComponent(req.originalUrl));
+}
 
-  const header = req.headers.authorization || '';
-  const [scheme, encoded] = header.split(' ');
+app.get('/admin/login', (req, res) => {
+  if (req.session && req.session.estAdmin) {
+    return res.redirect('/admin/candidatures');
+  }
+  res.render('admin-login', { erreur: null, next: req.query.next || '/admin/candidatures' });
+});
 
-  if (scheme === 'Basic' && encoded) {
-    const [user, password] = Buffer.from(encoded, 'base64').toString().split(':');
-    if (user === ADMIN_USER && password === ADMIN_PASSWORD) {
-      return next();
-    }
+app.post('/admin/login', (req, res) => {
+  const { identifiant, mot_de_passe, next } = req.body;
+  const destination = next && next.startsWith('/admin') ? next : '/admin/candidatures';
+
+  if (!ADMIN_PASSWORD) {
+    return res.status(500).send("Accès admin non configuré : définissez ADMIN_USER et ADMIN_PASSWORD dans le fichier .env.");
   }
 
-  res.set('WWW-Authenticate', 'Basic realm="Espace admin"');
-  return res.status(401).send('Authentification requise.');
-}
+  if (identifiant === ADMIN_USER && mot_de_passe === ADMIN_PASSWORD) {
+    req.session.regenerate((err) => {
+      if (err) return res.render('admin-login', { erreur: "Erreur de session, réessayez.", next: destination });
+      req.session.estAdmin = true;
+      req.session.save(() => res.redirect(destination));
+    });
+    return;
+  }
+
+  res.render('admin-login', { erreur: "Identifiant ou mot de passe incorrect.", next: destination });
+});
+
+app.post('/admin/logout', (req, res) => {
+  req.session.destroy(() => res.redirect('/admin/login'));
+});
 
 app.use('/uploads', requireAdminAuth, express.static(path.join(__dirname, 'uploads')));
 

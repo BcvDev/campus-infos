@@ -36,13 +36,13 @@ identifiants MTN déjà obtenus.)*
 
 ## Espace admin
 
-`/admin/candidatures` est protégé par une authentification basique (login/mot de passe du navigateur).
+`/admin/candidatures` est protégé par une vraie page de connexion (`/admin/login`), avec session côté serveur — pas la popup grise du navigateur.
 
 1. Copier `.env.example` en `.env`
-2. Définir `ADMIN_USER` et `ADMIN_PASSWORD` avec un vrai mot de passe
+2. Définir `ADMIN_USER`, `ADMIN_PASSWORD` et `SESSION_SECRET` (une longue chaîne aléatoire, ex. `openssl rand -hex 32`)
 3. Redémarrer le serveur
 
-Sans `ADMIN_PASSWORD` défini, l'espace admin refuse l'accès (erreur 500) plutôt que de rester ouvert.
+Sans `ADMIN_PASSWORD` défini, l'espace admin refuse l'accès (erreur 500) plutôt que de rester ouvert. La session dure 8h ; un bouton "Déconnexion" est disponible dans l'espace admin.
 
 Depuis l'espace admin : recherche instantanée (nom, section, téléphone, email), stats en un coup d'œil, et export CSV de toutes les candidatures via le bouton "Exporter en CSV" (ou directement `/admin/export.csv`).
 

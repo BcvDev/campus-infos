@@ -17,7 +17,12 @@
       L'Œil du Campus
       <span>Espace admin — candidatures reçues</span>
     </p>
-    <a class="btn-export" href="/admin/export.csv">⬇ Exporter en CSV</a>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a class="btn-export" href="/admin/export.csv">⬇ Exporter en CSV</a>
+      <form method="POST" action="/admin/logout" style="margin:0;">
+        <button type="submit" class="btn-export" style="background:transparent; border:1px solid rgba(255,255,255,0.3); cursor:pointer;">Déconnexion</button>
+      </form>
+    </div>
   </div>
 
   <div class="admin-wrap">
