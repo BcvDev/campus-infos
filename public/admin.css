@@ -202,6 +202,26 @@ table.admin-table {
 }
 .liens-pieces a:hover { border-color: var(--press-red); color: var(--press-red); }
 .date-cell { color: var(--text-muted); white-space: nowrap; font-size: 0.82rem; }
+.action-cell { white-space: nowrap; }
+.action-cell form { margin: 0; }
+.btn-supprimer {
+  border: 1px solid rgba(165,15,41,0.25);
+  background: rgba(165,15,41,0.07);
+  color: var(--press-red);
+  border-radius: 7px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.btn-supprimer:hover {
+  background: rgba(165,15,41,0.14);
+  border-color: var(--press-red);
+}
+.btn-supprimer:active { transform: translateY(1px); }
 
 .aucun-resultat {
   text-align: center;

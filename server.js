@@ -172,6 +172,22 @@ app.post('/candidater', (req, res) => {
   });
 });
 
+// --- Supprimer une candidature (et ses fichiers) ---
+app.post('/admin/candidature/:id/supprimer', requireAdminAuth, (req, res) => {
+  const c = db.prepare('SELECT * FROM candidatures WHERE id = ?').get(req.params.id);
+  if (!c) return res.redirect('/admin/candidatures');
+
+  CHAMPS_FICHIERS.forEach(champ => {
+    const nomFichier = c[champ.cle];
+    if (!nomFichier) return;
+    const cheminDisque = path.join(uploadDir, nomFichier);
+    if (fs.existsSync(cheminDisque)) fs.unlinkSync(cheminDisque);
+  });
+
+  db.prepare('DELETE FROM candidatures WHERE id = ?').run(req.params.id);
+  res.redirect('/admin/candidatures');
+});
+
 // --- Espace admin pour consulter les candidatures reçues ---
 app.get('/admin/candidatures', requireAdminAuth, (req, res) => {
   const rows = db.prepare('SELECT * FROM candidatures ORDER BY date_soumission DESC').all();

@@ -69,6 +69,7 @@
             <th>N° paiement</th>
             <th>Pièces jointes</th>
             <th>Reçue le</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -101,6 +102,11 @@
                 </div>
               </td>
               <td class="date-cell"><%= dateAffichee %></td>
+              <td class="action-cell">
+                <form method="POST" action="/admin/candidature/<%= c.id %>/supprimer" onsubmit="return confirmerSuppression(<%= JSON.stringify(c.nom_complet) %>);">
+                  <button type="submit" class="btn-supprimer">🗑 Supprimer</button>
+                </form>
+              </td>
             </tr>
           <% }) %>
         </tbody>
@@ -112,6 +118,10 @@
   </div>
 
   <script>
+    function confirmerSuppression(nom) {
+      return window.confirm(`Supprimer définitivement la candidature de ${nom} ?\n\nLes fichiers associés seront également supprimés. Cette action est irréversible.`);
+    }
+
     const champRecherche = document.getElementById('recherche');
     const lignes = Array.from(document.querySelectorAll('#table-candidatures tbody tr'));
 
