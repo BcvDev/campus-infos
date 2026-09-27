@@ -7,6 +7,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const PDFDocument = require('pdfkit');
 const { Document, Packer, Table, TableRow, TableCell, Paragraph, TextRun, WidthType, HeadingLevel, AlignmentType } = require('docx');
+const archiver = require('archiver');
 const db = require('./db');
 
 const app = express();
@@ -317,6 +318,67 @@ app.get('/admin/export.docx', requireAdminAuth, async (req, res) => {
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
   res.setHeader('Content-Disposition', `attachment; filename="candidatures-${Date.now()}.docx"`);
   res.send(buffer);
+});
+
+// --- Export des documents joints (zip) ---
+function nomDossierCandidat(c) {
+  const base = c.nom_complet
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // enlève les accents
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return `${base || 'candidat'}_${c.id}`;
+}
+
+const CHAMPS_FICHIERS = [
+  { cle: 'fichier_carte_etudiant', label: 'carte_etudiant' },
+  { cle: 'fichier_cni', label: 'cni' },
+  { cle: 'fichier_lettre_motivation', label: 'lettre_motivation' },
+  { cle: 'fichier_preuve_paiement', label: 'preuve_paiement' }
+];
+
+function ajouterFichiersCandidat(archive, c, prefixeDossier) {
+  CHAMPS_FICHIERS.forEach(champ => {
+    const nomFichier = c[champ.cle];
+    if (!nomFichier) return;
+    const cheminDisque = path.join(uploadDir, nomFichier);
+    if (fs.existsSync(cheminDisque)) {
+      const extension = path.extname(nomFichier);
+      archive.file(cheminDisque, { name: `${prefixeDossier}/${champ.label}${extension}` });
+    }
+  });
+}
+
+// Tous les documents de toutes les candidatures, un dossier par candidat
+app.get('/admin/export-fichiers.zip', requireAdminAuth, (req, res) => {
+  const rows = db.prepare('SELECT * FROM candidatures ORDER BY date_soumission DESC').all();
+
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', `attachment; filename="documents-candidatures-${Date.now()}.zip"`);
+
+  const archive = archiver('zip', { zlib: { level: 9 } });
+  archive.on('error', (err) => { throw err; });
+  archive.pipe(res);
+
+  rows.forEach(c => ajouterFichiersCandidat(archive, c, nomDossierCandidat(c)));
+
+  archive.finalize();
+});
+
+// Les 4 documents d'une seule candidature
+app.get('/admin/candidature/:id/fichiers.zip', requireAdminAuth, (req, res) => {
+  const c = db.prepare('SELECT * FROM candidatures WHERE id = ?').get(req.params.id);
+  if (!c) return res.status(404).send('Candidature introuvable.');
+
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', `attachment; filename="documents-${nomDossierCandidat(c)}.zip"`);
+
+  const archive = archiver('zip', { zlib: { level: 9 } });
+  archive.on('error', (err) => { throw err; });
+  archive.pipe(res);
+
+  ajouterFichiersCandidat(archive, c, nomDossierCandidat(c));
+
+  archive.finalize();
 });
 
 // --- Export CSV des candidatures ---

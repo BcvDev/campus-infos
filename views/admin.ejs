@@ -20,6 +20,7 @@
     <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
       <a class="btn-export" href="/admin/export.docx">📄 Word</a>
       <a class="btn-export" href="/admin/export.pdf">📕 PDF</a>
+      <a class="btn-export" href="/admin/export-fichiers.zip">🗂 Documents (.zip)</a>
       <a class="btn-export-discret" href="/admin/export.csv">CSV</a>
       <form method="POST" action="/admin/logout" style="margin:0;">
         <button type="submit" class="btn-export" style="background:transparent; border:1px solid rgba(255,255,255,0.3); cursor:pointer;">Déconnexion</button>
@@ -96,6 +97,7 @@
                   <a href="/uploads/<%= c.fichier_cni %>" target="_blank">CNI</a>
                   <a href="/uploads/<%= c.fichier_lettre_motivation %>" target="_blank">Lettre</a>
                   <a href="/uploads/<%= c.fichier_preuve_paiement %>" target="_blank">Preuve</a>
+                  <a href="/admin/candidature/<%= c.id %>/fichiers.zip" style="font-weight:600;">⬇ Zip</a>
                 </div>
               </td>
               <td class="date-cell"><%= dateAffichee %></td>

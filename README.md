@@ -50,4 +50,7 @@ Depuis l'espace admin : recherche instantanée (nom, section, téléphone, email
 
 - **Numéros de paiement** : ceux affichés dans le formulaire sont ceux du flyer (01 53 82 20 32 / 01 45 21 19 48) — à confirmer avec le Coordonnateur Général.
 - **Date limite** : fixée au 18 octobre 2026 dans `server.js` (`DATE_LIMITE`) — passé cette date, le formulaire se ferme automatiquement.
-- **Hébergement** : fonctionne tel quel sur un serveur Node classique (Render, Railway, VPS...). Pour du serverless (Vercel), remplacer better-sqlite3 par une base externe et un stockage fichier externe (S3, Cloudinary), le système de fichiers n'y étant pas persistant.
+- **Hébergement et persistance des fichiers** :
+  - `candidatures.db` (base SQLite) et `uploads/` (documents des candidats) sont de simples fichiers sur disque. Ça fonctionne tel quel sur un serveur classique **à condition que le disque soit persistant** : VPS, Render (avec un "Persistent Disk" attaché — le disque éphémère par défaut de Render efface tout à chaque redéploiement/redémarrage), Railway (volume attaché).
+  - **Vercel et le serverless en général sont à éviter tels quels** : le système de fichiers y est jetable, donc `uploads/` et `candidatures.db` disparaîtraient à tout moment. Pour héberger là-dessus, il faudrait remplacer `better-sqlite3` par une base externe (Postgres, etc.) et stocker les fichiers sur un service externe (S3, Cloudinary) — non fait dans cette version.
+  - Dans tous les cas : **sauvegarder régulièrement** `candidatures.db` et le dossier `uploads/` (ex. export automatique vers un stockage externe), car ce sont les seules copies des données et des pièces jointes.
