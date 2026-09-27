@@ -11,6 +11,8 @@ const archiver = require('archiver');
 const db = require('./db');
 
 const app = express();
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3000;
 
 // Date limite de dépôt des candidatures (18 octobre 2026, fin de journée)
