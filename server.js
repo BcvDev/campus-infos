@@ -5,6 +5,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const PDFDocument = require('pdfkit');
+const { Document, Packer, Table, TableRow, TableCell, Paragraph, TextRun, WidthType, HeadingLevel, AlignmentType } = require('docx');
 const db = require('./db');
 
 const app = express();
@@ -188,6 +190,133 @@ app.get('/admin/candidatures', requireAdminAuth, (req, res) => {
     parSection,
     recentes
   });
+});
+
+// --- Colonnes communes aux exports ---
+const COLONNES_EXPORT = [
+  { cle: 'nom_complet', titre: 'Nom complet' },
+  { cle: 'numero_carte', titre: 'N° carte' },
+  { cle: 'section', titre: 'Section' },
+  { cle: 'filiere', titre: 'Filière' },
+  { cle: 'telephone', titre: 'Téléphone' },
+  { cle: 'email', titre: 'Email' },
+  { cle: 'numero_paiement', titre: 'N° paiement' },
+  { cle: 'date_soumission', titre: 'Reçue le' }
+];
+
+// --- Export PDF des candidatures ---
+app.get('/admin/export.pdf', requireAdminAuth, (req, res) => {
+  const rows = db.prepare('SELECT * FROM candidatures ORDER BY date_soumission DESC').all();
+
+  const doc = new PDFDocument({ margin: 30, size: 'A4', layout: 'landscape' });
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename="candidatures-${Date.now()}.pdf"`);
+  doc.pipe(res);
+
+  const largeurs = [110, 65, 75, 90, 80, 130, 85, 95]; // doit correspondre à COLONNES_EXPORT
+  const xDepart = doc.page.margins.left;
+  const largeurDispo = doc.page.width - doc.page.margins.left - doc.page.margins.right;
+
+  function entete() {
+    doc.fillColor('#0E1B33').font('Helvetica-Bold').fontSize(15)
+      .text("L'Œil du Campus — Candidatures reçues", xDepart, doc.y);
+    doc.fillColor('#5A6478').font('Helvetica').fontSize(9)
+      .text(`${rows.length} candidature(s) — généré le ${new Date().toLocaleString('fr-FR')}`);
+    doc.moveDown(0.8);
+    ligneEntete();
+  }
+
+  function ligneEntete() {
+    const y = doc.y;
+    doc.rect(xDepart, y, largeurDispo, 20).fill('#0E1B33');
+    doc.fillColor('#fff').font('Helvetica-Bold').fontSize(8);
+    let x = xDepart;
+    COLONNES_EXPORT.forEach((col, i) => {
+      doc.text(col.titre, x + 4, y + 6, { width: largeurs[i] - 8, ellipsis: true });
+      x += largeurs[i];
+    });
+    doc.y = y + 20;
+    doc.fillColor('#17203A').font('Helvetica').fontSize(8);
+  }
+
+  entete();
+
+  rows.forEach((c, index) => {
+    const hauteurLigne = 20;
+    if (doc.y + hauteurLigne > doc.page.height - doc.page.margins.bottom) {
+      doc.addPage();
+      doc.y = doc.page.margins.top;
+      ligneEntete();
+    }
+    const y = doc.y;
+    if (index % 2 === 0) doc.rect(xDepart, y, largeurDispo, hauteurLigne).fill('#F5F2E8');
+    doc.fillColor('#17203A').font('Helvetica').fontSize(8);
+    let x = xDepart;
+    COLONNES_EXPORT.forEach((col, i) => {
+      const valeur = col.cle === 'date_soumission'
+        ? new Date(c[col.cle]).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : (c[col.cle] || '');
+      doc.text(String(valeur), x + 4, y + 6, { width: largeurs[i] - 8, ellipsis: true });
+      x += largeurs[i];
+    });
+    doc.y = y + hauteurLigne;
+  });
+
+  doc.end();
+});
+
+// --- Export Word (.docx) des candidatures ---
+app.get('/admin/export.docx', requireAdminAuth, async (req, res) => {
+  const rows = db.prepare('SELECT * FROM candidatures ORDER BY date_soumission DESC').all();
+
+  const celluleEntete = (texte) => new TableCell({
+    shading: { fill: '0E1B33' },
+    children: [new Paragraph({ children: [new TextRun({ text: texte, bold: true, color: 'FFFFFF', size: 18 })] })]
+  });
+
+  const celluleTexte = (texte) => new TableCell({
+    children: [new Paragraph({ children: [new TextRun({ text: String(texte ?? ''), size: 18 })] })]
+  });
+
+  const ligneEntete = new TableRow({
+    tableHeader: true,
+    children: COLONNES_EXPORT.map(col => celluleEntete(col.titre))
+  });
+
+  const lignesDonnees = rows.map(c => new TableRow({
+    children: COLONNES_EXPORT.map(col => {
+      const valeur = col.cle === 'date_soumission'
+        ? new Date(c[col.cle]).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : c[col.cle];
+      return celluleTexte(valeur);
+    })
+  }));
+
+  const document = new Document({
+    sections: [{
+      properties: { page: { size: { orientation: 'landscape' } } },
+      children: [
+        new Paragraph({
+          heading: HeadingLevel.HEADING_1,
+          children: [new TextRun({ text: "L'Œil du Campus — Candidatures reçues", bold: true, color: '0E1B33' })]
+        }),
+        new Paragraph({
+          alignment: AlignmentType.LEFT,
+          children: [new TextRun({ text: `${rows.length} candidature(s) — généré le ${new Date().toLocaleString('fr-FR')}`, color: '5A6478', size: 20 })]
+        }),
+        new Paragraph({ text: '' }),
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [ligneEntete, ...lignesDonnees]
+        })
+      ]
+    }]
+  });
+
+  const buffer = await Packer.toBuffer(document);
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+  res.setHeader('Content-Disposition', `attachment; filename="candidatures-${Date.now()}.docx"`);
+  res.send(buffer);
 });
 
 // --- Export CSV des candidatures ---
