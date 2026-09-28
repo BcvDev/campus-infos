@@ -19,6 +19,8 @@ Le formulaire est accessible sur http://localhost:3000
 - `views/admin.ejs` — liste des candidatures reçues (avec liens vers les fichiers)
 - `public/accueil.css` — style de la page vitrine
 - `public/style.css` — identité visuelle du formulaire (masthead navy + rouge presse)
+- `views/partials/icones.ejs` — sprite d'icônes SVG (utilisation : `<svg class="ico"><use href="#ic-nom"/></svg>`)
+- `public/logo.jpg` / `public/logo-mark.png` — logo complet et emblème seul (rognés depuis `icon.jpeg`, qui reste le favicon)
 - `public/dropzone.js` — gestion des zones de dépôt de fichiers (clic + glisser-déposer)
 - `uploads/` — fichiers envoyés par les candidats (créé automatiquement)
 
@@ -38,9 +40,8 @@ identifiants MTN déjà obtenus.)*
 
 `/admin/candidatures` est protégé par une vraie page de connexion (`/admin/login`), avec session côté serveur — pas la popup grise du navigateur.
 
-1. Copier `.env.example` en `.env`
-2. Définir `ADMIN_USER`, `ADMIN_PASSWORD` et `SESSION_SECRET` (une longue chaîne aléatoire, ex. `openssl rand -hex 32`)
-3. Redémarrer le serveur
+1. Définir `ADMIN_USER`, `ADMIN_PASSWORD` et `SESSION_SECRET` (une longue chaîne aléatoire, ex. `openssl rand -hex 32`)
+2. Redémarrer le serveur
 
 Sans `ADMIN_PASSWORD` défini, l'espace admin refuse l'accès (erreur 500) plutôt que de rester ouvert. La session dure 8h ; un bouton "Déconnexion" est disponible dans l'espace admin.
 
@@ -54,3 +55,7 @@ Depuis l'espace admin : recherche instantanée (nom, section, téléphone, email
   - `candidatures.db` (base SQLite) et `uploads/` (documents des candidats) sont de simples fichiers sur disque. Ça fonctionne tel quel sur un serveur classique **à condition que le disque soit persistant** : VPS, Render (avec un "Persistent Disk" attaché — le disque éphémère par défaut de Render efface tout à chaque redéploiement/redémarrage), Railway (volume attaché).
   - **Vercel et le serverless en général sont à éviter tels quels** : le système de fichiers y est jetable, donc `uploads/` et `candidatures.db` disparaîtraient à tout moment. Pour héberger là-dessus, il faudrait remplacer `better-sqlite3` par une base externe (Postgres, etc.) et stocker les fichiers sur un service externe (S3, Cloudinary) — non fait dans cette version.
   - Dans tous les cas : **sauvegarder régulièrement** `candidatures.db` et le dossier `uploads/` (ex. export automatique vers un stockage externe), car ce sont les seules copies des données et des pièces jointes.
+
+## Typographie
+
+Polices Google Fonts : **Playfair Display** (titres, chiffres clés) et **Montserrat** (texte, formulaires), les mêmes familles que le logo. Elles se changent à deux endroits : les variables `--serif` / `--sans` en tête de `public/style.css`, et le lien Google Fonts dans le `<head>` de chaque vue de `views/`.

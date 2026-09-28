@@ -9,8 +9,8 @@
   --text:       #17203A;   /* texte principal */
   --text-muted: #5A6478;
 
-  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --sans: 'Inter', -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans: 'Montserrat', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -22,44 +22,57 @@ body {
   background: var(--ink);
 }
 
+/* ===== Icônes (sprite SVG, cf. views/partials/icones.ejs) ===== */
+.ico {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  vertical-align: -0.2em;
+}
+
+/* ===== Plaque logo (logo sur fond sombre) ===== */
+.plaque-logo {
+  display: inline-block;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 22px;
+  box-shadow: 0 8px 24px -10px rgba(0,0,0,0.5);
+}
+.plaque-logo img { display: block; height: 96px; width: auto; }
+
 /* ===== Masthead ===== */
 .masthead {
+  position: relative;
   background: var(--ink);
   color: #fff;
   text-align: center;
-  padding: 56px 20px 40px;
+  padding: 44px 20px 38px;
   border-bottom: 3px solid var(--press-red);
 }
-.masthead .kicker {
-  font-size: 0.82rem;
-  color: var(--press-red);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  margin: 0 0 14px;
+.lien-retour {
+  color: #9FADC8;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
-.lien-retour { color: #9FADC8; text-decoration: none; }
 .lien-retour:hover { color: #fff; }
+.lien-retour--haut { position: absolute; top: 20px; left: 24px; }
+.masthead .plaque-logo { margin-bottom: 26px; }
 .masthead h1 {
   font-family: var(--serif);
   font-weight: 700;
-  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  font-size: clamp(1.7rem, 4.4vw, 2.4rem);
   margin: 0;
-  line-height: 1.05;
+  line-height: 1.15;
 }
 .masthead h1 span {
   display: block;
+  font-family: var(--sans);
   font-size: 0.42em;
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 500;
   color: #C7D0E0;
-  margin-top: 6px;
-}
-.masthead .signature {
-  font-family: var(--serif);
-  font-style: italic;
-  color: #9FADC8;
-  margin: 18px 0 0;
-  font-size: 1rem;
+  margin-top: 10px;
+  letter-spacing: 0.02em;
 }
 
 /* ===== Page ===== */
@@ -334,6 +347,7 @@ input[type="radio"]:focus-visible + .carte-section { outline: 2px solid var(--in
   text-align: center;
   color: #fff;
 }
+.confirmation-page .plaque-logo { margin-bottom: 30px; }
 .confirmation-page h1 { font-family: var(--serif); font-size: 2rem; }
 .confirmation-page a {
   display: inline-block;

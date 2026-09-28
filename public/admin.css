@@ -16,10 +16,21 @@ body.admin-body {
   gap: 12px;
 }
 .admin-topbar .titre {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--serif);
   font-weight: 700;
   font-size: 1.4rem;
   margin: 0;
+}
+.topbar-logo {
+  height: 48px;
+  width: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 4px 7px;
+  flex: none;
 }
 .admin-topbar .titre span {
   display: block;
@@ -29,7 +40,11 @@ body.admin-body {
   color: #9FADC8;
   margin-top: 2px;
 }
-.admin-topbar a.btn-export {
+.admin-topbar a.btn-export, .admin-topbar button.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
   background: var(--press-red);
   color: #fff;
   text-decoration: none;
@@ -205,6 +220,9 @@ table.admin-table {
 .action-cell { white-space: nowrap; }
 .action-cell form { margin: 0; }
 .btn-supprimer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: 1px solid rgba(165,15,41,0.25);
   background: rgba(165,15,41,0.07);
   color: var(--press-red);
@@ -248,6 +266,13 @@ table.admin-table {
   max-width: 380px;
   box-shadow: 0 20px 50px -12px rgba(0,0,0,0.5);
   border-top: 4px solid var(--press-red);
+}
+.login-logo {
+  display: block;
+  height: 112px;
+  width: auto;
+  margin: 0 auto 18px;
+  mix-blend-mode: multiply;
 }
 .login-kicker {
   font-size: 0.78rem;

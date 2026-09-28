@@ -7,24 +7,29 @@
   <title>Admin — Candidatures | L'Œil du Campus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/admin.css">
 </head>
 <body class="admin-body">
 
+  <%- include('partials/icones') %>
+
   <div class="admin-topbar">
-    <p class="titre">
-      L'Œil du Campus
-      <span>Espace admin — candidatures reçues</span>
-    </p>
+    <div class="titre">
+      <img src="/logo-mark.png" alt="" class="topbar-logo">
+      <div>
+        L'Œil du Campus
+        <span>Espace admin — candidatures reçues</span>
+      </div>
+    </div>
     <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-      <a class="btn-export" href="/admin/export.docx">📄 Word</a>
-      <a class="btn-export" href="/admin/export.pdf">📕 PDF</a>
-      <a class="btn-export" href="/admin/export-fichiers.zip">🗂 Documents (.zip)</a>
+      <a class="btn-export" href="/admin/export.docx"><svg class="ico" aria-hidden="true"><use href="#ic-word"/></svg>Word</a>
+      <a class="btn-export" href="/admin/export.pdf"><svg class="ico" aria-hidden="true"><use href="#ic-pdf"/></svg>PDF</a>
+      <a class="btn-export" href="/admin/export-fichiers.zip"><svg class="ico" aria-hidden="true"><use href="#ic-archive"/></svg>Documents (.zip)</a>
       <a class="btn-export-discret" href="/admin/export.csv">CSV</a>
       <form method="POST" action="/admin/logout" style="margin:0;">
-        <button type="submit" class="btn-export" style="background:transparent; border:1px solid rgba(255,255,255,0.3); cursor:pointer;">Déconnexion</button>
+        <button type="submit" class="btn-export" style="background:transparent; border:1px solid rgba(255,255,255,0.3); cursor:pointer;"><svg class="ico" aria-hidden="true"><use href="#ic-logout"/></svg>Déconnexion</button>
       </form>
     </div>
   </div>
@@ -99,13 +104,13 @@
                   <a href="/uploads/<%= c.fichier_cni %>" target="_blank">CNI</a>
                   <a href="/uploads/<%= c.fichier_lettre_motivation %>" target="_blank">Lettre</a>
                   <a href="/uploads/<%= c.fichier_preuve_paiement %>" target="_blank">Preuve</a>
-                  <a href="/admin/candidature/<%= c.id %>/fichiers.zip" style="font-weight:600;">⬇ Zip</a>
+                  <a href="/admin/candidature/<%= c.id %>/fichiers.zip" style="font-weight:600;"><svg class="ico" aria-hidden="true"><use href="#ic-download"/></svg> Zip</a>
                 </div>
               </td>
               <td class="date-cell"><%= dateAffichee %></td>
               <td class="action-cell">
                 <form method="POST" action="/admin/candidature/<%= c.id %>/supprimer" onsubmit="return confirmerSuppression(<%= JSON.stringify(c.nom_complet) %>);">
-                  <button type="submit" class="btn-supprimer">🗑 Supprimer</button>
+                  <button type="submit" class="btn-supprimer"><svg class="ico" aria-hidden="true"><use href="#ic-trash"/></svg> Supprimer</button>
                 </form>
               </td>
             </tr>

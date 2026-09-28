@@ -1,128 +1,174 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/jpeg" href="/icon.jpeg">
   <title>L'Œil du Campus 100% Natitingou — Recrutement 2026-2027</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/accueil.css">
 </head>
+
 <body class="page-accueil">
 
-  <div class="ruban-diagonal"></div>
+  <%- include('partials/icones') %>
 
-  <header class="entete">
-    <div class="logo">
-      <svg viewBox="0 0 40 40" class="logo__oeil"><ellipse cx="20" cy="20" rx="17" ry="10" stroke="currentColor" stroke-width="2.4" fill="none"/><circle cx="20" cy="20" r="5.5" fill="currentColor"/></svg>
-      <div class="logo__texte">
-        <strong>L'ŒIL DU CAMPUS</strong>
-        <span>100% NATITINGOU</span>
-      </div>
-    </div>
-    <p class="devise">Informer sans parti pris !</p>
-  </header>
-
-  <section class="bandeau-appel">
-    <span class="pastille">Appel à candidature</span>
-    <h1>Rejoignez l'équipe de<br>L'Œil du Campus<span>100% Natitingou</span></h1>
-    <p class="sous-titre">Recrutement des nouveaux stagiaires pour l'année 2026–2027</p>
-  </section>
-
-  <main class="contenu">
-
-    <p class="intro">
-      Dans le cadre de l'élargissement de ses différentes sections, L'Œil du Campus 100% Natitingou
-      lance un appel à candidature à l'endroit des étudiants du Centre Universitaire de Natitingou
-      désireux de mettre leurs compétences et leur passion au service de l'information universitaire.
-    </p>
-
-    <a href="/candidature" class="cta-postuler">Postuler maintenant</a>
-
-    <div class="colonnes">
-
-      <div class="colonne">
-        <div class="colonne__entete colonne__entete--rouge">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
-          <h2>Sections concernées</h2>
+    <header class="entete">
+      <a href="/" class="logo" aria-label="L'Œil du Campus 100% Natitingou — accueil">
+        <img src="/logo.jpg" alt="L'Œil du Campus 100% Natitingou — Informer sans parti pris" class="logo__img"
+          width="32" height="32">
+      </a>
+      <div class="logo-oeil" role="img" aria-label="L'Œil du Campus 100% Natitingou — Informer sans parti pris !">
+        <div class="logo-oeil__haut">
+          <span class="logo-oeil__oeil">L'ŒIL</span>
+          <div class="logo-oeil__droite">
+            <span class="logo-oeil__campus">du Campus</span>
+            <span class="logo-oeil__trait"></span>
+            <span class="logo-oeil__ville">100% Natitingou</span>
+          </div>
         </div>
-        <ul>
-          <li>Graphisme &amp; montage vidéo</li>
-          <li>Photographie</li>
-          <li>Reportage &amp; Médias</li>
-        </ul>
+        <p class="logo-oeil__devise"><mark>Informer</mark>sans parti pris !</p>
       </div>
+    </header>
 
-      <div class="colonne">
-        <div class="colonne__entete colonne__entete--navy">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h9l4 4v12H6V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h2>Conditions</h2>
+    <section class="bandeau-appel">
+      <span class="pastille">Appel à candidature</span>
+      <h1>Rejoignez l'équipe de<br>L'Œil du Campus<span>100% Natitingou</span></h1>
+      <p class="sous-titre">Recrutement des nouveaux stagiaires pour l'année 2026–2027</p>
+    </section>
+
+    <main class="contenu">
+
+      <p class="intro">
+        Dans le cadre de l'élargissement de ses différentes sections, L'Œil du Campus 100% Natitingou
+        lance un appel à candidature à l'endroit des étudiants du Centre Universitaire de Natitingou
+        désireux de mettre leurs compétences et leur passion au service de l'information universitaire.
+      </p>
+
+      <a href="/candidature" class="cta-postuler">Postuler maintenant</a>
+
+      <div class="colonnes">
+
+        <div class="colonne">
+          <div class="colonne__entete colonne__entete--rouge">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z"
+                stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+              <circle cx="12" cy="12.5" r="3" stroke="currentColor" stroke-width="1.6" />
+            </svg>
+            <h2>Sections concernées</h2>
+          </div>
+          <ul>
+            <li>Graphisme &amp; montage vidéo</li>
+            <li>Photographie</li>
+            <li>Reportage &amp; Médias</li>
+          </ul>
         </div>
-        <ul class="liste-coche">
-          <li>Être étudiant(e) régulièrement inscrit(e) à la FAST ou à l'ENS</li>
-          <li>Être dynamique, créatif(ve) et disponible</li>
-          <li>Avoir un bon esprit d'équipe</li>
-          <li>Être motivé(e) à contribuer au développement de la presse universitaire</li>
-        </ul>
-      </div>
 
-      <div class="colonne">
-        <div class="colonne__entete colonne__entete--navy">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 9h6M9 13h6M9 17h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          <h2>Pièces à fournir</h2>
+        <div class="colonne">
+          <div class="colonne__entete colonne__entete--navy">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M6 4h9l4 4v12H6V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <h2>Conditions</h2>
+          </div>
+          <ul class="liste-coche">
+            <li>Être étudiant(e) régulièrement inscrit(e) à la FAST ou à l'ENS</li>
+            <li>Être dynamique, créatif(ve) et disponible</li>
+            <li>Avoir un bon esprit d'équipe</li>
+            <li>Être motivé(e) à contribuer au développement de la presse universitaire</li>
+          </ul>
         </div>
-        <ul class="liste-coche">
-          <li>Photocopie de la carte d'étudiant ou fiche de validation 2026–2027</li>
-          <li>Photocopie de la carte d'identité ou de la CIP</li>
-          <li>Lettre de motivation adressée au Coordonnateur Général</li>
-          <li>Le tout dans une chemise dossier</li>
-        </ul>
+
+        <div class="colonne">
+          <div class="colonne__entete colonne__entete--navy">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M6 4h12v16H6V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+              <path d="M9 9h6M9 13h6M9 17h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+            <h2>Pièces à fournir</h2>
+          </div>
+          <ul class="liste-coche">
+            <li>Photocopie de la carte d'étudiant ou fiche de validation 2026–2027</li>
+            <li>Photocopie de la carte d'identité ou de la CIP</li>
+            <li>Lettre de motivation adressée au Coordonnateur Général</li>
+            <li>Le tout dans une chemise dossier</li>
+          </ul>
+        </div>
+
       </div>
 
-    </div>
-
-    <div class="ligne-infos">
-      <div class="carte-info carte-info--frais">
-        <span class="carte-info__label">Frais d'inscription</span>
-        <span class="carte-info__valeur">2 000 FCFA</span>
-        <span class="carte-info__note">donnant droit à un tee-shirt</span>
+      <div class="ligne-infos">
+        <div class="carte-info carte-info--frais">
+          <span class="carte-info__icone"><svg class="ico" aria-hidden="true">
+              <use href="#ic-coins" />
+            </svg></span>
+          <div class="carte-info__texte">
+            <span class="carte-info__label">Frais d'inscription</span>
+            <span class="carte-info__valeur">2 000 FCFA</span>
+            <span class="carte-info__note">donnant droit à un tee-shirt</span>
+          </div>
+        </div>
+        <div class="carte-info">
+          <span class="carte-info__icone"><svg class="ico" aria-hidden="true">
+              <use href="#ic-flag" />
+            </svg></span>
+          <div class="carte-info__texte">
+            <span class="carte-info__label">Lancement</span>
+            <span class="carte-info__valeur carte-info__valeur--rouge">Première vague</span>
+          </div>
+        </div>
+        <div class="carte-info">
+          <span class="carte-info__icone"><svg class="ico" aria-hidden="true">
+              <use href="#ic-calendar" />
+            </svg></span>
+          <div class="carte-info__texte">
+            <span class="carte-info__label">Date limite de dépôt</span>
+            <span class="carte-info__valeur carte-info__valeur--rouge">18 octobre 2026</span>
+          </div>
+        </div>
       </div>
-      <div class="carte-info">
-        <span class="carte-info__label">Lancement</span>
-        <span class="carte-info__valeur carte-info__valeur--rouge">Première vague</span>
+
+      <div class="bande-contacts">
+        <span><svg class="ico" aria-hidden="true">
+            <use href="#ic-phone" />
+          </svg>Contacts</span>
+        <strong>01 53 82 20 32 &nbsp;·&nbsp; 01 45 21 19 48</strong>
       </div>
-      <div class="carte-info">
-        <span class="carte-info__label">Date limite de dépôt</span>
-        <span class="carte-info__valeur carte-info__valeur--rouge">18 octobre 2026</span>
+
+      <a href="/candidature" class="cta-postuler cta-postuler--large">Je dépose ma candidature</a>
+
+    </main>
+
+    <section class="bande-cloture">
+      <svg class="ico ico--xl" aria-hidden="true">
+        <use href="#ic-users" />
+      </svg>
+      <p>Rejoignez une équipe ambitieuse, créative et engagée pour faire rayonner le Centre Universitaire de Natitingou
+        à travers une information responsable et professionnelle.</p>
+    </section>
+
+    <footer class="pied-accueil">
+      <div class="pied-accueil__marque">
+        <img src="/logo-mark.png" alt="logo oeil dd campus" width="32px" height="32px">
+        <div>
+          <strong>L'ŒIL DU CAMPUS 100% NATITINGOU</strong>
+          <span>Informer sans parti pris !</span>
+        </div>
       </div>
-    </div>
-
-    <div class="bande-contacts">
-      <span>Contacts</span>
-      <strong>01 53 82 20 32 &nbsp;·&nbsp; 01 45 21 19 48</strong>
-    </div>
-
-    <a href="/candidature" class="cta-postuler cta-postuler--large">Je dépose ma candidature</a>
-
-  </main>
-
-  <section class="bande-cloture">
-    <p>Rejoignez une équipe ambitieuse, créative et engagée pour faire rayonner le Centre Universitaire de Natitingou à travers une information responsable et professionnelle.</p>
-  </section>
-
-  <footer class="pied-accueil">
-    <div class="pied-accueil__marque">
-      <strong>L'ŒIL DU CAMPUS 100% NATITINGOU</strong>
-      <span>Informer sans parti pris !</span>
-    </div>
-    <div class="pied-accueil__signataire">
-      <strong>Elisé Koto</strong>
-      <span>Coordonnateur Général</span>
-    </div>
-  </footer>
+      <div class="pied-accueil__signataire">
+        <strong>Elisé Koto</strong>
+        <span>Coordonnateur Général</span>
+      </div>
+    </footer>
 
 </body>
+
 </html>
